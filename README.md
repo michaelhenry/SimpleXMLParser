@@ -1,5 +1,7 @@
 # SimpleXMLParser
 
+[![codecov](https://codecov.io/gh/michaelhenry/SimpleXMLParser/branch/main/graph/badge.svg?token=3BBGJUDV3M)](https://codecov.io/gh/michaelhenry/SimpleXMLParser)
+
 A Simple XML Parser built with `Swift.Concurrency`.
 
 ## Example
