@@ -21,6 +21,7 @@ final public class SimpleXMLParser: NSObject, XMLParserDelegate {
     private var root = Element(name: "Root")
     private var addedElements = [Element]()
     private var continuation: CheckedContinuation<Element, Error>?
+    private var error: Error?
 
     public func parse(xml: String) async throws -> Element {
         return try await withCheckedThrowingContinuation { [weak self] continuation in
@@ -37,11 +38,11 @@ final public class SimpleXMLParser: NSObject, XMLParserDelegate {
     }
 
     public func parser(_ parser: XMLParser, validationErrorOccurred validationError: Error) {
-        continuation?.resume(throwing: validationError)
+        error = validationError
     }
 
     public func parser(_ parser: XMLParser, parseErrorOccurred parseError: Error) {
-        continuation?.resume(throwing: parseError)
+        error = parseError
     }
 
     public func parser(
@@ -74,7 +75,11 @@ final public class SimpleXMLParser: NSObject, XMLParserDelegate {
         guard let continuation = continuation else {
             return
         }
-        continuation.resume(returning: root)
+        if let error = error {
+            continuation.resume(throwing: error)
+        } else {
+            continuation.resume(returning: root)
+        }
     }
 
     // MARK: - Private

@@ -39,5 +39,15 @@ final class SimpleXMLParserTests: XCTestCase {
         XCTAssertEqual(rootElement.children[0].children[1].children[0].children[0].name, "failure")
     }
 
-    // TODO - Test cases
+    func testEmptyXML() async throws {
+        do {
+            let xml = """
+            hello world
+            """
+            let parser = SimpleXMLParser()
+            _ = try await parser.parse(xml: xml)
+        } catch {
+            XCTAssertEqual(XMLParser.ErrorCode.emptyDocumentError.rawValue, (error as NSError).code)
+        }
+    }
 }
